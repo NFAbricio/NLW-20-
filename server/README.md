@@ -110,5 +110,6 @@ Tabela: **rooms**
 - `npm run dev` — Inicia o servidor em modo desenvolvimento
 - `npm run start` — Inicia o servidor em produção
 - `npm run db:seed` — Reseta e popula o banco de dados
+- `npx drizzle-kit studio` — Abre o Drizzle Studio para visualizar o banco de dados
 
 --- 

@@ -8,6 +8,13 @@
       "when": 1752347826703,
       "tag": "0000_demonic_lady_bullseye",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1752788052677,
+      "tag": "0001_talented_rattler",
+      "breakpoints": true
     }
   ]
 }

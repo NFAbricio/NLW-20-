@@ -1,32 +1,33 @@
-import { useQuery } from '@tanstack/react-query';
-import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Badge } from '@/components/ui/badge';
+import { useQuery } from '@tanstack/react-query'
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Badge } from '@/components/ui/badge'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/components/ui/card'
+import { dayjs } from '@/lib/dayjs'
 
 type GetRoomsAPIReponse = Array<{
-  id: string;
-  name: string;
-  questionsCount: number;
-  createdAt: string;
-}>;
+  id: string
+  name: string
+  questionsCount: number
+  createdAt: string
+}>
 
 export function CreateRoom() {
   const { data, isLoading } = useQuery({
     queryKey: ['get-rooms'],
     queryFn: async () => {
-      const response = await fetch('http://localhost:3333/rooms');
-      const result: GetRoomsAPIReponse = await response.json();
+      const response = await fetch('http://localhost:3333/rooms')
+      const result: GetRoomsAPIReponse = await response.json()
 
-      return result;
+      return result
     },
-  });
+  })
 
   return (
     <div className="min-h-screen px-4 py-8">
@@ -54,7 +55,7 @@ export function CreateRoom() {
 
                       <div className="flex items-center gap-2">
                         <Badge className="text-xs" variant="secondary">
-                          {room.createdAt}
+                          {dayjs().toNow()}
                         </Badge>
                         <Badge className="text-xs" variant="secondary">
                           {room.questionsCount} pergunta(s)
@@ -67,12 +68,12 @@ export function CreateRoom() {
                       <ArrowRight className="size-3" />
                     </span>
                   </Link>
-                );
+                )
               })}
             </CardContent>
           </Card>
         </div>
       </div>
     </div>
-  );
+  )
 }

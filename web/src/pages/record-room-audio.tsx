@@ -1,5 +1,6 @@
 /** biome-ignore-all lint/suspicious/noConsole: <explanation> */
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 const isRecordingSupported =
@@ -7,8 +8,40 @@ const isRecordingSupported =
   typeof navigator.mediaDevices.getUserMedia === 'function' &&
   typeof window.MediaRecorder === 'function'
 
+type RoomParams = {
+  roomId: string
+}
+
 export function RecordRoomAudio() {
+  const params = useParams<RoomParams>()
   const [isRecording, setIsRecording] = useState(false)
+  const recorder = useRef<MediaRecorder | null>(null)
+
+  function stopRecording() {
+    setIsRecording(false)
+
+    if (recorder.current && recorder.current.state !== 'inactive') {
+      recorder.current.stop()
+    }
+  }
+
+  async function upLoadAudio(audio: Blob) {
+    const formData = new FormData()
+
+    formData.append('file', audio, 'audio.webm')
+
+    const response = await fetch(
+      `http://localhost:3333/rooms/${params.roomId}/audio`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    )
+
+    const result = await response.json()
+
+    console.log(result)
+  }
 
   async function startRecording() {
     if (!isRecordingSupported) {
@@ -26,31 +59,39 @@ export function RecordRoomAudio() {
       },
     })
 
-    const recorder = new MediaRecorder(audio, {
+    recorder.current = new MediaRecorder(audio, {
       mimeType: 'audio/webm',
       audioBitsPerSecond: 64_000,
     })
 
-    recorder.ondataavailable = (event) => {
+    recorder.current.ondataavailable = (event) => {
       if (event.data.size > 0) {
-        // biome-ignore lint/suspicious/noConsole: <explanation>
-        console.log(event.data)
+        upLoadAudio(event.data)
       }
     }
 
-    recorder.onstart = () => {
-      // biome-ignore lint/suspicious/noConsole: <explanation>
+    recorder.current.onstart = () => {
       console.log('Gravação iniciada!')
     }
 
-    recorder.onstop = () => {
+    recorder.current.onstop = () => {
       console.log('Gravação encerrada')
     }
+
+    recorder.current.start()
+  }
+
+  if (!params.roomId) {
+    return <Navigate replace to="/" />
   }
 
   return (
     <div className="flex h-screen flex-col items-center justify-center gap-3">
-      <Button onClick={startRecording}>Gravar áudio</Button>
+      {isRecording ? (
+        <Button onClick={stopRecording}>Parar Gravação</Button>
+      ) : (
+        <Button onClick={startRecording}>Gravar áudio</Button>
+      )}
       {isRecording ? <p>Gravando...</p> : <p>Pausado</p>}
     </div>
   )

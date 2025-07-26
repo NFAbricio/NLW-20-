@@ -32,15 +32,15 @@ Content-Type: application/json
 
 #Get room questions
 # @name getRoomQuestions
-GET {{baseUrl}}/rooms/{{roomId}}/questions
+GET {{baseUrl}}/rooms/{{{{roomId}}}}/questions
 
 ###
 
 # Create question
 # @name createQuestion
-POST {{baseUrl}}/rooms/{{roomId}}/questions
+POST {{baseUrl}}/rooms/9058f164-43a4-4604-a979-936b36beffab/questions
 Content-Type: application/json
 
 {
-    "question": "Com quanto anos Nikola Tesla morreu?"
+    "question": "Para qual time devo torcer?"
 }

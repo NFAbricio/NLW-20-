@@ -67,8 +67,15 @@ docker-compose up -d
 
 Isso irá iniciar um container PostgreSQL com a extensão pgvector e rodar o script de setup inicial.
 
-### 5. Rodar as migrations e seed
+### 5. Rodar as migrations e o seed
 
+Primeiro, aplique as migrações para criar a estrutura do banco de dados:
+
+```bash
+npm run db:migrate
+```
+
+Depois, popule o banco com dados de exemplo:
 ```bash
 npm run db:seed
 ```
